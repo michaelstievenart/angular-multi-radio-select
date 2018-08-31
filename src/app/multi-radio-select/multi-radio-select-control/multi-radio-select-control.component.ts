@@ -5,11 +5,11 @@ import { MatDialog } from '@angular/material';
 import { MultiRadioSelectDialog } from '../multi-radio-select/multi-radio-select-dialog.component';
 
 @Component({
-  selector: 'multi-radio-select-form-control',
-  templateUrl: './multi-radio-select-form-control.component.html',
-  styleUrls: ['./multi-radio-select-form-control.component.scss'],
+  selector: 'multi-radio-select-control',
+  templateUrl: './multi-radio-select-control.component.html',
+  styleUrls: ['./multi-radio-select-control.component.scss'],
 })
-export class MultiRadioSelectFormControl implements OnInit {
+export class MultiRadioSelectControl implements OnInit {
 
   @Input() multiRadioSelectControlModel: MultiRadioSelectControlModel;
   @Input() multiRadioSelectDialogModel: MultiRadioSelectDialogModel;

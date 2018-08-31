@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MultiRadioSelectFormControl } from './multi-radio-select-form-control.component';
+import { MultiRadioSelectControl } from './multi-radio-select-control.component';
 
-describe('MultiRadioSelectFormControl', () => {
-  let component: MultiRadioSelectFormControl;
-  let fixture: ComponentFixture<MultiRadioSelectFormControl>;
+describe('MultiRadioSelectControl', () => {
+  let component: MultiRadioSelectControl;
+  let fixture: ComponentFixture<MultiRadioSelectControl>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MultiRadioSelectFormControl ]
+      declarations: [ MultiRadioSelectControl ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MultiRadioSelectFormControl);
+    fixture = TestBed.createComponent(MultiRadioSelectControl);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

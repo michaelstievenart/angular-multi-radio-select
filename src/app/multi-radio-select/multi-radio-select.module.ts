@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MultiRadioSelectFormControl } from './multi-radio-select-control/multi-radio-select-form-control.component';
+import { MultiRadioSelectControl } from './multi-radio-select-control/multi-radio-select-control.component';
 import { MultiRadioSelectDialog } from './multi-radio-select/multi-radio-select-dialog.component';
 import { MatDialogModule, MatSelectModule } from '@angular/material';
 
@@ -11,15 +11,15 @@ import { MatDialogModule, MatSelectModule } from '@angular/material';
     MatSelectModule
   ],
   declarations: [
-    MultiRadioSelectFormControl,
+    MultiRadioSelectControl,
     MultiRadioSelectDialog
   ],
   exports: [
-    MultiRadioSelectFormControl,
+    MultiRadioSelectControl,
     MultiRadioSelectDialog
   ],
   entryComponents: [
-    MultiRadioSelectFormControl,
+    MultiRadioSelectControl,
     MultiRadioSelectDialog
   ]
 })
