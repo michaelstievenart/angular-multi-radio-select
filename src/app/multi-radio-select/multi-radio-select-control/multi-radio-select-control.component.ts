@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
+import { MultiRadioSelectControlInput, MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
 import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 import { MatDialog } from '@angular/material';
 import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
@@ -11,7 +11,7 @@ import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio
 })
 export class MultiRadioSelectControl implements OnInit {
 
-  @Input() multiRadioSelectControlModel: MultiRadioSelectControl;
+  @Input() multiRadioSelectControlModel: MultiRadioSelectControlInput;
   @Input() multiRadioSelectDialogModel: MultiRadioSelectDialogInput;
   @Input() dataSource: MultiSelectDataSource<any>;
   @Input() previouslySelected: any[];
