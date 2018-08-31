@@ -1,8 +1,8 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import { MultiRadioSelectControlModel, MultiRadioSelectDialogModel } from '../model/multi-radio-select.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
 import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 import { MatDialog } from '@angular/material';
-import { MultiRadioSelectDialog } from '../multi-radio-select/multi-radio-select-dialog.component';
+import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
 
 @Component({
   selector: 'multi-radio-select-control',
@@ -11,8 +11,8 @@ import { MultiRadioSelectDialog } from '../multi-radio-select/multi-radio-select
 })
 export class MultiRadioSelectControl implements OnInit {
 
-  @Input() multiRadioSelectControlModel: MultiRadioSelectControlModel;
-  @Input() multiRadioSelectDialogModel: MultiRadioSelectDialogModel;
+  @Input() multiRadioSelectControlModel: MultiRadioSelectControl;
+  @Input() multiRadioSelectDialogModel: MultiRadioSelectDialogInput;
   @Input() dataSource: MultiSelectDataSource<any>;
   @Input() previouslySelected: any[];
 
@@ -33,17 +33,19 @@ export class MultiRadioSelectControl implements OnInit {
       height = win.innerHeight || e.clientHeight || g.clientHeight;
 
     const dialogRef = this.dialog.open(MultiRadioSelectDialog, {
-      width: `${width / 2}px`,
+      width: `${width * 0.8}px`,
+      height: `${height * 0.8}px`,
       minWidth: `${this.multiRadioSelectDialogModel.minWidth}px`,
       maxWidth: `${this.multiRadioSelectDialogModel.maxWidth}px`,
       minHeight: `${this.multiRadioSelectDialogModel.minHeight}px`,
       maxHeight: `${this.multiRadioSelectDialogModel.maxHeight}px`,
       disableClose: this.multiRadioSelectDialogModel.disableClose,
       data: {
-        dataSource: this.dataSource,
-        previouslySelected: this.previouslySelected,
         dialogTitle: this.multiRadioSelectDialogModel.dialogTitle,
-        searchControlPlaceHolder: this.multiRadioSelectDialogModel.searchControlPlaceHolder
+        searchControlPlaceHolder: this.multiRadioSelectDialogModel.searchControlPlaceHolder,
+        /*dimensions: { width: '', height: '' },*/
+        dataSource: this.dataSource,
+        previouslySelected: this.previouslySelected
       }
     });
   }

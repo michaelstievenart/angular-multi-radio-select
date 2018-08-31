@@ -1,4 +1,6 @@
-interface MultiRadioSelectDialogModel {
+import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
+
+interface MultiRadioSelectDialogInput {
   searchControlPlaceHolder: string;
   dialogTitle: string;
   disableClose?: boolean;
@@ -8,8 +10,15 @@ interface MultiRadioSelectDialogModel {
   maxHeight?: number;
 }
 
-interface MultiRadioSelectControlModel {
+interface MultiRadioSelectControlInput {
   placeHolder: string;
 }
 
-export { MultiRadioSelectDialogModel, MultiRadioSelectControlModel};
+interface MultiRadioSelectDialogData {
+  dialogTitle: string;
+  searchControlPlaceHolder: string;
+  dataSource: MultiSelectDataSource<any>;
+  previouslySelected: any;
+}
+
+export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData};

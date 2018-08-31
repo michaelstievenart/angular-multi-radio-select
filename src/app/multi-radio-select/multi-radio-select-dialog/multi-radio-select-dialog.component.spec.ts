@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MultiRadioSelectDialog } from './multi-radio-select-dialog.component';
 
-describe('MultiRadioSelectDialog', () => {
+describe('MultiRadioSelectDialogInput', () => {
   let component: MultiRadioSelectDialog;
   let fixture: ComponentFixture<MultiRadioSelectDialog>;
 
