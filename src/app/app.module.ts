@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MultiRadioSelectModule } from './multi-radio-select/multi-radio-select.module';
-import { MatFormFieldModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -13,8 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MultiRadioSelectModule,
-    MatFormFieldModule
+    MultiRadioSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
