@@ -13,8 +13,18 @@
     width: 100%;
 
     .form {
-      width: 80%;
+      width: 90%;
+      padding-top: 5%;
+      padding-right: 5%;
+      padding-left: 5%;
+
       margin: auto;
+      border: 1px solid black;
+      max-width: 400px;
+      min-height: 200px;
+
+      .control {
+      }
     }
   }
 }

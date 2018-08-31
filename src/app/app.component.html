@@ -4,7 +4,22 @@
   </header>
   <div class="body-container">
     <div class="form">
-      <multi-radio-select-form-control></multi-radio-select-form-control>
+      <div class="control">
+        <multi-radio-select-form-control
+          [multiRadioSelectControlModel]="{ placeHolder: 'Custom Control' }"
+          [multiRadioSelectDialogModel]="{
+          searchControlPlaceHolder: 'Custom Place Holder',
+          dialogTitle: 'My Title',
+          disableClose: false,
+          minWidth: 400,
+          minHeight: 400,
+          maxWidth: 800,
+          maxHeight: 800
+          }"
+        >
+        </multi-radio-select-form-control>
+      </div>
     </div>
+    <pre></pre>
   </div>
 </div>
