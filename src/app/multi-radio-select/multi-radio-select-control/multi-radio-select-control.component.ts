@@ -11,8 +11,8 @@ import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio
 })
 export class MultiRadioSelectControl implements OnInit {
 
-  @Input() multiRadioSelectControlModel: MultiRadioSelectControlInput;
-  @Input() multiRadioSelectDialogModel: MultiRadioSelectDialogInput;
+  @Input() multiRadioSelectControlInput: MultiRadioSelectControlInput;
+  @Input() multiRadioSelectDialogInput: MultiRadioSelectDialogInput;
   @Input() dataSource: MultiSelectDataSource<any>;
   @Input() previouslySelected: any[];
 
@@ -35,14 +35,14 @@ export class MultiRadioSelectControl implements OnInit {
     const dialogRef = this.dialog.open(MultiRadioSelectDialog, {
       width: `${width * 0.8}px`,
       height: `${height * 0.8}px`,
-      minWidth: `${this.multiRadioSelectDialogModel.minWidth}px`,
-      maxWidth: `${this.multiRadioSelectDialogModel.maxWidth}px`,
-      minHeight: `${this.multiRadioSelectDialogModel.minHeight}px`,
-      maxHeight: `${this.multiRadioSelectDialogModel.maxHeight}px`,
-      disableClose: this.multiRadioSelectDialogModel.disableClose,
+      minWidth: `${this.multiRadioSelectDialogInput.minWidth}px`,
+      maxWidth: `${this.multiRadioSelectDialogInput.maxWidth}px`,
+      minHeight: `${this.multiRadioSelectDialogInput.minHeight}px`,
+      maxHeight: `${this.multiRadioSelectDialogInput.maxHeight}px`,
+      disableClose: this.multiRadioSelectDialogInput.disableClose,
       data: {
-        dialogTitle: this.multiRadioSelectDialogModel.dialogTitle,
-        searchControlPlaceHolder: this.multiRadioSelectDialogModel.searchControlPlaceHolder,
+        dialogTitle: this.multiRadioSelectDialogInput.dialogTitle,
+        searchControlPlaceHolder: this.multiRadioSelectDialogInput.searchControlPlaceHolder,
         /*dimensions: { width: '', height: '' },*/
         dataSource: this.dataSource,
         previouslySelected: this.previouslySelected
