@@ -1,5 +1,5 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/typings/collections';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 abstract class MultiSelectDataSource<T> implements DataSource<T> {
 
