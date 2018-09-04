@@ -1,8 +1,62 @@
 <div class="dialog">
-  <h2 mat-dialog-title>{{dialogData.dialogTitle}}</h2>
-  <mat-dialog-content></mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-raised-button color="accent" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onAccept()">Accept</button>
-  </mat-dialog-actions>
+  <div class="header-section">
+    <h2 class="title">{{dialogData.dialogTitle}}</h2>
+    <div class="search">
+      <form>
+        <mat-form-field>
+          <input matInput
+                 placeholder="{{dialogData.searchControlPlaceHolder}}"
+                 aria-label="Filter Control"
+                 [matAutocomplete]="auto"
+                 [formControl]="filterCtrl"
+                 class="filter-autocomplete">
+          <mat-icon matSuffix>search</mat-icon>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let filterPoint of filteredData | async" [value]="filterPoint" style="display:none">
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+
+    </div>
+    <div class="close">
+      <button mat-icon-button><mat-icon (click)="onCancel()">clear</mat-icon></button>
+
+    </div>
+  </div>
+  <mat-dialog-content class="body-section" [ngClass]="{'loading': isLoading}">
+    <div class="spinner-container" *ngIf="dialogData.dataSource.loading$ | async">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="dialogData.dataSource.data$ | async">
+      <div class="data-rows">
+        <div *ngFor="let multi of typesController.viewInstance; trackBy: trackByFn">
+          <div class="control">
+            <mat-checkbox color="primary"
+                          [(ngModel)]="multi.checked">
+              {{multi.selectType.viewValue}}
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <div class="footer-section">
+    <mat-paginator [length]="dataCount"
+                   [pageSize]="pageSize"
+                   [pageSizeOptions]="[100, 500, 1000]" showFirstLastButtons>
+    </mat-paginator>
+    <mat-dialog-actions>
+      <div class="left-container">
+        <button mat-raised-button color="accent" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="accent" (click)="onCancel()">Reset</button>
+      </div>
+
+      <div class="right-container">
+        <button mat-raised-button color="primary" (click)="onAccept()">Accept</button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+
 </div>

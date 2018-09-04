@@ -3,6 +3,7 @@ import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 interface MultiRadioSelectDialogInput {
   searchControlPlaceHolder: string;
   dialogTitle: string;
+  dataSource: MultiSelectDataSource<any>;
   disableClose?: boolean;
   minWidth?: number;
   minHeight?: number;
@@ -21,4 +22,4 @@ interface MultiRadioSelectDialogData {
   previouslySelected: any;
 }
 
-export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData};
+export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData };

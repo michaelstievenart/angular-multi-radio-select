@@ -10,12 +10,14 @@
           [multiRadioSelectDialogInput]="{
           searchControlPlaceHolder: 'Custom Place Holder',
           dialogTitle: 'Multi Radio Select Title',
-          disableClose: false,
+          disableClose: true,
           minWidth: 400,
-          minHeight: 400,
+          minHeight: 800,
           maxWidth: 800,
           maxHeight: 800
           }"
+          [dataSource]="dataSource"
+          [previouslySelected]="[]"
         >
         </multi-radio-select-control>
       </div>

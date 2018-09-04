@@ -43,7 +43,6 @@ export class MultiRadioSelectControl implements OnInit {
       data: {
         dialogTitle: this.multiRadioSelectDialogInput.dialogTitle,
         searchControlPlaceHolder: this.multiRadioSelectDialogInput.searchControlPlaceHolder,
-        /*dimensions: { width: '', height: '' },*/
         dataSource: this.dataSource,
         previouslySelected: this.previouslySelected
       }

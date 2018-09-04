@@ -1,0 +1,141 @@
+@import '~src/sass/colours';
+
+@mixin style-overflow-text() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+$height: 550px;
+$spinner-height: 100px;
+$padding: 24px;
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+
+  .header-section {
+    height: 20%;
+    display: flex;
+    color: $primary;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $primary;
+
+    h2 {
+      width: 45%;
+      font-size: 21px;
+      font-weight: 300;
+    }
+
+    .search {
+      width: 50%;
+
+      form mat-form-field {
+        width: 90%;
+      }
+    }
+
+    .close {
+      width: 5%;
+      position: relative;
+      top: -10px;
+
+      button {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+      }
+
+      mat-icon {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .body-section {
+    height: 65%;
+    min-height: $height;
+    max-height: $height;
+    overflow: auto;
+
+    &.loading div.ng-star-inserted:nth-child(2) {
+      display: none;
+    }
+
+    .spinner-container {
+      $spinner-height: 100px;
+      position: relative;
+      top: $height/2 - ($spinner-height/2);
+
+      mat-spinner {
+        margin: auto;
+      }
+    }
+
+    .data-rows {
+      padding-left: 10px;
+      padding-top: $padding;
+      padding-bottom: $padding;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      .control {
+        width: 95%;
+        @include style-overflow-text();
+
+        ::ng-deep {
+          mat-checkbox {
+
+            .mat-checkbox-layout {
+              display: inline;
+              .mat-checkbox-label {
+                color: $primary;
+                font-size: 12px;
+              }
+              .mat-checkbox-inner-container {
+                width: 17px;
+                height: 17px;
+              }
+            }
+
+          }
+        }
+      }
+    }
+
+    .data-rows > div {
+      flex: 1 25%;
+      max-width: 25%;
+    }
+  }
+
+  .footer-section {
+    height: 15%;
+    border-top: 1px solid $primary;
+
+    mat-dialog-actions {
+      padding-top: $padding;
+      display: flex;
+
+      .left-container {
+        width: 50%;
+        text-align: left;
+
+        button:first-child {
+          margin-right: 10px;
+        }
+      }
+
+      .right-container {
+        width: 50%;
+        text-align: right;
+      }
+
+      button {
+        width: 64px;
+      }
+    }
+  }
+
+}
