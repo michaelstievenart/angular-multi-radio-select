@@ -4,7 +4,7 @@ import { MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { debounceTime, map, startWith, tap } from 'rxjs/operators';
-import { MultiSelectType, SelectType } from '../model/multi-radio-select-types.model';
+import { MultiSelectType, SelectType, UniqueIndex } from '../model/multi-radio-select-types.model';
 
 @Component({
   selector: 'multi-radio-select-dialog',
@@ -26,6 +26,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   useReset = false;
 
   selected: MultiSelectType [];
+  currentPageIndex = 0;
 
   constructor(public dialogRef: MatDialogRef<MultiRadioSelectDialog>,
               @Inject(MAT_DIALOG_DATA) public dialogData: MultiRadioSelectDialogData) {
@@ -35,7 +36,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
     this.setupFilterCtrl();
     this.pageSize = this.dialogData.pageSizeOption;
     this.selected = this.dialogData.previouslySelected;
-    this.dialogData.dataSource.get(0, this.pageSize, 'asc');
+    this.dialogData.dataSource.get(this.paginator.pageIndex, this.pageSize, 'asc');
 
     this.dialogData.dataSource.paginationInfo$.subscribe((count) => {
       this.dataCount = count;
@@ -43,7 +44,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
 
     this.dialogData.dataSource.data().subscribe((values) => {
       if (values && values.length > 0) {
-        this.typesController.init(values, this.selected, this.paginator.pageIndex, this.pageSize);
+        this.typesController.init(values, this.selected, this.currentPageIndex, this.pageSize);
       }
     });
 
@@ -85,6 +86,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   paginate() {
+    this.currentPageIndex = this.paginator.pageIndex;
     this.dialogData.dataSource.get(
       this.paginator.pageIndex,
       this.paginator.pageSize,
@@ -107,7 +109,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   trackByFn(index: number, multi: MultiSelectType) {
-    return multi.index;
+    return multi.uniqueIndex.index;
   }
 
   onRadioChange(multi: MultiSelectType) {
@@ -134,10 +136,10 @@ export class MultiSelectTypesController {
     this._instance = [];
     for (let i = 0; i < data.length; i++) {
       const index = this.getUniqueIndex(i, pageIndex, pageSizeOption);
-      this._instance.push(new MultiSelectType(data[i], index, false));
+      this._instance.push(new MultiSelectType(data[i], new UniqueIndex(index, pageIndex), false));
     }
     this.copyInstance();
-    this.updateUsingPreviouslySelected(previouslySelected);
+    this.updateUsingPreviouslySelected(previouslySelected, pageIndex, pageSizeOption);
   }
 
   getUniqueIndex(index: number, pageIndex: number, pageSizeOption: number) {
@@ -160,10 +162,12 @@ export class MultiSelectTypesController {
     return this._resetInstance;
   }
 
-  updateUsingPreviouslySelected(previouslySelected: MultiSelectType[]) {
+  updateUsingPreviouslySelected(previouslySelected: MultiSelectType[], currentPageIndex: number, pageSizeOption: number) {
     if (previouslySelected) {
       for (const prev of previouslySelected) {
-        this.viewInstance[prev.index].checked = true;
+        if (prev.uniqueIndex.pageIndex === currentPageIndex) {
+          this.viewInstance[prev.uniqueIndex.index - (currentPageIndex * pageSizeOption)].checked = true;
+        }
       }
     }
   }
@@ -182,7 +186,7 @@ export class MultiSelectTypesController {
     for (let i = 0; i < this._instance.length; i++) {
       this._resetInstance.push(new MultiSelectType(
         this._instance[i].selectType,
-        this._instance[i].index,
+        this._instance[i].uniqueIndex,
         this._instance[i].checked,
       ));
     }

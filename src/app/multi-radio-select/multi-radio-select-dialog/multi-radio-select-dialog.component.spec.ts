@@ -1,7 +1,7 @@
 import { async, ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 
 import { MultiRadioSelectDialog, MultiSelectTypesController } from './multi-radio-select-dialog.component';
-import { MultiSelectType } from '../model/multi-radio-select-types.model';
+import { MultiSelectType, UniqueIndex } from '../model/multi-radio-select-types.model';
 import {
   MAT_DIALOG_DATA,
   MatAutocompleteModule,
@@ -21,11 +21,12 @@ import { MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
 describe('MultiRadioSelectDialog', () => {
   let component: MultiRadioSelectDialog;
   let fixture: ComponentFixture<MultiRadioSelectDialog>;
+  const prevSelectedValue = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, new UniqueIndex(0, 0), true);
   const dialogData: MultiRadioSelectDialogData = {
     dialogTitle: 'Test title',
     searchControlPlaceHolder: 'Test Search control place holder',
     dataSource: new MultiSelectDataSourceStub(),
-    previouslySelected: [new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true)],
+    previouslySelected: [prevSelectedValue],
     pageSizeOption: 500
   };
 
@@ -63,7 +64,7 @@ describe('MultiRadioSelectDialog', () => {
     it('should set selected to previously selected', () => {
       component.ngOnInit();
       expect(component.selected).toEqual(
-        [new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true)]
+        [prevSelectedValue]
       );
     });
 
@@ -72,7 +73,7 @@ describe('MultiRadioSelectDialog', () => {
       flush();
       const expected = component.typesController.instance;
       const actual = buildIndexArray(0, 500);
-      actual[0].checked = true;
+      actual[prevSelectedValue.uniqueIndex.index].checked = prevSelectedValue.checked;
       expect(expected).toEqual(actual);
     }));
 
@@ -99,18 +100,18 @@ describe('MultiRadioSelectDialog', () => {
 
   describe('onRadioChange', () => {
     it('should add an item to selected array', () => {
-      const current = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true);
+      const current = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, new UniqueIndex(0, 0), true);
       component.selected = [current];
-      const update = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, 0, true);
+      const update = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
       component.onRadioChange(update);
 
       expect(component.selected).toEqual([current, update]);
     });
 
     it('should remove an item to selected array', () => {
-      const data1 = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true);
-      const data2 = new MultiSelectType({value: 'The Batman 2', viewValue: 'Bruce Wayne'}, 1, true);
-      const data3 = new MultiSelectType({value: 'The Batman 3', viewValue: 'Bruce Wayne'}, 2, true);
+      const data1 = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, new UniqueIndex(0, 0), true);
+      const data2 = new MultiSelectType({value: 'The Batman 2', viewValue: 'Bruce Wayne'}, new UniqueIndex(1, 0), true);
+      const data3 = new MultiSelectType({value: 'The Batman 3', viewValue: 'Bruce Wayne'}, new UniqueIndex(2, 0), true);
       component.selected = [data1, data2, data3];
       data1.checked = false;
       component.onRadioChange(data1);
@@ -125,7 +126,7 @@ function buildIndexArray(pageIndex: number, pageSizeOption: number) {
   const output = [];
   for (let i = (pageIndex * pageSizeOption); i < ((pageIndex * pageSizeOption) + pageSizeOption); i++) {
     const index = i + (pageIndex * pageSizeOption);
-    output.push(new MultiSelectType(data[i], index, false));
+    output.push(new MultiSelectType(data[i], new UniqueIndex(index, pageIndex), false));
   }
   return output;
 }
