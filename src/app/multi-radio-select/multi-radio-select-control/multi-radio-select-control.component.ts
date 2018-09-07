@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MultiRadioSelectControlInput, MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
+import { DialogCloseType, MultiRadioSelectControlInput, MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
 import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 import { MatDialog } from '@angular/material';
-import { DialogCloseType, MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
+import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
 
 @Component({
   selector: 'multi-radio-select-control',

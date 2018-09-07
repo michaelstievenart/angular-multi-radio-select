@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatPaginator } from '@angular/material';
-import { MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
+import { DialogCloseType, MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { debounceTime, map, startWith, tap } from 'rxjs/operators';
@@ -25,6 +25,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   isLoading = true;
   useReset = false;
 
+  tempSelected: MultiSelectType [] = [];
   selected: MultiSelectType [];
   currentPageIndex = 0;
 
@@ -36,6 +37,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
     this.setupFilterCtrl();
     this.pageSize = this.dialogData.pageSizeOption;
     this.selected = this.dialogData.previouslySelected;
+    this.tempSelected = [...this.selected];
     this.dialogData.dataSource.get(this.paginator.pageIndex, this.pageSize, 'asc');
 
     this.dialogData.dataSource.paginationInfo$.subscribe((count) => {
@@ -105,6 +107,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   onAccept() {
+    this.selected = [...this.tempSelected];
     this.dialogRef.close(new DialogCloseType('accept', this.selected));
   }
 
@@ -114,10 +117,16 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
 
   onRadioChange(multi: MultiSelectType) {
     if (multi.checked) {
-      this.selected.push(multi);
+      this.tempSelected.push(multi);
     } else {
-      const index = this.selected.indexOf(multi);
-      this.selected.splice(index, 1);
+      let index;
+      for (const select of this.tempSelected) {
+        if (select.uniqueIndex.index === multi.uniqueIndex.index && select.uniqueIndex.pageIndex === multi.uniqueIndex.pageIndex) {
+          index = this.tempSelected.indexOf(select);
+          break;
+        }
+      }
+      this.tempSelected.splice(index, 1);
     }
   }
 }
@@ -192,6 +201,4 @@ export class MultiSelectTypesController {
     }
   }
 }
-export class DialogCloseType {
-  constructor(public type: string, public result?: any) {}
-}
+

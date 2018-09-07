@@ -16,7 +16,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Data, MultiSelectDataSourceStub } from '../multi-select-data-source.stub';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
+import { DialogCloseType, MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
 
 describe('MultiRadioSelectDialog', () => {
   let component: MultiRadioSelectDialog;
@@ -48,7 +48,7 @@ describe('MultiRadioSelectDialog', () => {
         BrowserAnimationsModule
       ],
       providers: [
-        {provide: MatDialogRef, useValue: {}},
+        {provide: MatDialogRef, useValue: new DialogMock()},
         {provide: MAT_DIALOG_DATA, useValue: dialogData}
       ]
     })
@@ -101,25 +101,57 @@ describe('MultiRadioSelectDialog', () => {
   describe('onRadioChange', () => {
     it('should add an item to selected array', () => {
       const current = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, new UniqueIndex(0, 0), true);
-      component.selected = [current];
+      component.tempSelected = [current];
       const update = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
       component.onRadioChange(update);
 
-      expect(component.selected).toEqual([current, update]);
+      expect(component.tempSelected).toEqual([current, update]);
     });
 
     it('should remove an item to selected array', () => {
       const data1 = new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, new UniqueIndex(0, 0), true);
       const data2 = new MultiSelectType({value: 'The Batman 2', viewValue: 'Bruce Wayne'}, new UniqueIndex(1, 0), true);
       const data3 = new MultiSelectType({value: 'The Batman 3', viewValue: 'Bruce Wayne'}, new UniqueIndex(2, 0), true);
-      component.selected = [data1, data2, data3];
+      component.tempSelected = [data1, data2, data3];
       data1.checked = false;
       component.onRadioChange(data1);
 
-      expect(component.selected).toEqual([data2, data3]);
+      expect(component.tempSelected).toEqual([data2, data3]);
+    });
+  });
+
+  describe('onAccept', () => {
+    fit('should copy tempSelected into selected', () => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.onRadioChange(given);
+      component.onAccept();
+
+      expect(component.tempSelected).toEqual([given]);
+      expect(component.selected).toEqual([given]);
+    });
+
+    it('should close with an accept DialogCloseType with result', () => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.onRadioChange(given);
+      component.onAccept();
+      const matDialogRef = component.dialogRef as any;
+      const value = matDialogRef.value;
+
+      expect(value).toEqual(new DialogCloseType('accept', [given]));
     });
   });
 });
+
+class DialogMock {
+
+  value: any;
+
+  close(value?: any) {
+    this.value = value;
+  }
+}
 
 function buildIndexArray(pageIndex: number, pageSizeOption: number) {
   const data = Data.get();

@@ -22,4 +22,8 @@ interface MultiRadioSelectDialogData {
   pageSizeOption: number;
 }
 
-export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData };
+class DialogCloseType {
+  constructor(public type: string, public result?: any) {}
+}
+
+export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData, DialogCloseType };
