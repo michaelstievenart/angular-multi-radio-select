@@ -6,7 +6,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MultiSelectDataSourceStub } from '../multi-select-data-source.stub';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-fdescribe('MultiRadioSelectControlInput', () => {
+describe('MultiRadioSelectControlInput', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
 

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 
-import { MultiRadioSelectDialog } from './multi-radio-select-dialog.component';
+import { MultiRadioSelectDialog, MultiSelectTypesController } from './multi-radio-select-dialog.component';
 import { MultiSelectType } from '../model/multi-radio-select-types.model';
 import {
   MAT_DIALOG_DATA,
@@ -16,15 +16,17 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Data, MultiSelectDataSourceStub } from '../multi-select-data-source.stub';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MultiRadioSelectDialogData } from '../model/multi-radio-select.model';
 
 describe('MultiRadioSelectDialog', () => {
   let component: MultiRadioSelectDialog;
   let fixture: ComponentFixture<MultiRadioSelectDialog>;
-  const dialogData = {
+  const dialogData: MultiRadioSelectDialogData = {
     dialogTitle: 'Test title',
     searchControlPlaceHolder: 'Test Search control place holder',
     dataSource: new MultiSelectDataSourceStub(),
     previouslySelected: [new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true)],
+    pageSizeOption: 500
   };
 
   beforeEach(async(() => {
@@ -55,18 +57,44 @@ describe('MultiRadioSelectDialog', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MultiRadioSelectDialog);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   describe('OnInit', () => {
     it('should set selected to previously selected', () => {
-      component.typesController.init(Data.get(), []);
-
       component.ngOnInit();
       expect(component.selected).toEqual(
         [new MultiSelectType({value: 'The Batman', viewValue: 'Bruce Wayne'}, 0, true)]
       );
     });
+
+    it('should call MultiSelectTypesController init', fakeAsync(() => {
+      component.ngOnInit();
+      flush();
+      const expected = component.typesController.instance;
+      const actual = buildIndexArray(0, 500);
+      actual[0].checked = true;
+      expect(expected).toEqual(actual);
+    }));
+
+    it('should create a unique index that relates to pageIndex and pageSizeOption', fakeAsync(() => {
+      const controller = new MultiSelectTypesController();
+      const pageSizeOption = 500;
+      const case1 = controller.getUniqueIndex(0, 0, pageSizeOption);
+      const case2 = controller.getUniqueIndex(0, 1, pageSizeOption);
+      const case3 = controller.getUniqueIndex(0, 2, pageSizeOption);
+
+      const case4 = controller.getUniqueIndex(pageSizeOption - 1, 0, pageSizeOption);
+      const case5 = controller.getUniqueIndex(pageSizeOption - 1, 1, pageSizeOption);
+      const case6 = controller.getUniqueIndex(pageSizeOption - 1, 2, pageSizeOption);
+
+      expect(case1).toEqual(0);
+      expect(case2).toEqual(500);
+      expect(case3).toEqual(1000);
+
+      expect(case4).toEqual(499);
+      expect(case5).toEqual(999);
+      expect(case6).toEqual(1499);
+    }));
   });
 
   describe('onRadioChange', () => {
@@ -91,3 +119,13 @@ describe('MultiRadioSelectDialog', () => {
     });
   });
 });
+
+function buildIndexArray(pageIndex: number, pageSizeOption: number) {
+  const data = Data.get();
+  const output = [];
+  for (let i = (pageIndex * pageSizeOption); i < ((pageIndex * pageSizeOption) + pageSizeOption); i++) {
+    const index = i + (pageIndex * pageSizeOption);
+    output.push(new MultiSelectType(data[i], index, false));
+  }
+  return output;
+}

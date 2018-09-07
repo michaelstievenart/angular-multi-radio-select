@@ -32,8 +32,8 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.pageSize = this.dialogData.pageSizeOption;
     this.setupFilterCtrl();
+    this.pageSize = this.dialogData.pageSizeOption;
     this.selected = this.dialogData.previouslySelected;
     this.dialogData.dataSource.get(0, this.pageSize, 'asc');
 
@@ -43,7 +43,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
 
     this.dialogData.dataSource.data().subscribe((values) => {
       if (values && values.length > 0) {
-        this.typesController.init(values, this.selected);
+        this.typesController.init(values, this.selected, this.paginator.pageIndex, this.pageSize);
       }
     });
 
@@ -125,14 +125,23 @@ export class MultiSelectTypesController {
   private _viewInstance: MultiSelectType [] = [];
   private _resetInstance: MultiSelectType [] = [];
 
-  init(data: SelectType [], previouslySelected: any[]) {
+  init(data: SelectType [],
+       previouslySelected: any[],
+       pageIndex: number,
+       pageSizeOption: number) {
+
     this._viewInstance = [];
     this._instance = [];
     for (let i = 0; i < data.length; i++) {
-      this._instance.push(new MultiSelectType(data[i], i, false));
+      const index = this.getUniqueIndex(i, pageIndex, pageSizeOption);
+      this._instance.push(new MultiSelectType(data[i], index, false));
     }
     this.copyInstance();
     this.updateUsingPreviouslySelected(previouslySelected);
+  }
+
+  getUniqueIndex(index: number, pageIndex: number, pageSizeOption: number) {
+    return  index + (pageIndex * pageSizeOption);
   }
 
   get viewInstance(): MultiSelectType[] {
@@ -151,7 +160,7 @@ export class MultiSelectTypesController {
     return this._resetInstance;
   }
 
-  updateUsingPreviouslySelected(previouslySelected: any[]) {
+  updateUsingPreviouslySelected(previouslySelected: MultiSelectType[]) {
     if (previouslySelected) {
       for (const prev of previouslySelected) {
         this.viewInstance[prev.index].checked = true;
@@ -181,11 +190,4 @@ export class MultiSelectTypesController {
 }
 export class DialogCloseType {
   constructor(public type: string, public result?: any) {}
-}
-
-export class UniqueIndex {
-    constructor(public pageNumber: number,
-                public pageSize: number,
-                public index) {
-    }
 }
