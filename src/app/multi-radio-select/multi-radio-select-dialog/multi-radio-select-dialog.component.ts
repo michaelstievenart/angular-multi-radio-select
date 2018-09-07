@@ -23,7 +23,6 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   pageSize: number;
 
   isLoading = true;
-  useReset = false;
 
   tempSelected: MultiSelectType [] = [];
   selected: MultiSelectType [];
@@ -97,8 +96,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   onReset() {
-    this.useReset = true;
-    this.typesController.cacheForReset();
+    this.tempSelected = [];
     this.typesController.reset();
   }
 
@@ -134,7 +132,6 @@ export class MultiSelectTypesController {
 
   private _instance: MultiSelectType [] = [];
   private _viewInstance: MultiSelectType [] = [];
-  private _resetInstance: MultiSelectType [] = [];
 
   init(data: SelectType [],
        previouslySelected: any[],
@@ -167,10 +164,6 @@ export class MultiSelectTypesController {
     return this._instance;
   }
 
-  get resetInstance(): MultiSelectType[] {
-    return this._resetInstance;
-  }
-
   updateUsingPreviouslySelected(previouslySelected: MultiSelectType[], currentPageIndex: number, pageSizeOption: number) {
     if (previouslySelected) {
       for (const prev of previouslySelected) {
@@ -188,17 +181,6 @@ export class MultiSelectTypesController {
   reset() {
     this.copyInstance();
     this._viewInstance.forEach((value) => value.checked = false);
-  }
-
-  cacheForReset() {
-    this._resetInstance = [];
-    for (let i = 0; i < this._instance.length; i++) {
-      this._resetInstance.push(new MultiSelectType(
-        this._instance[i].selectType,
-        this._instance[i].uniqueIndex,
-        this._instance[i].checked,
-      ));
-    }
   }
 }
 

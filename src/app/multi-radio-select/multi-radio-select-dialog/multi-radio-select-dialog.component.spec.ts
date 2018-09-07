@@ -121,7 +121,7 @@ describe('MultiRadioSelectDialog', () => {
   });
 
   describe('onAccept', () => {
-    fit('should copy tempSelected into selected', () => {
+    it('should copy tempSelected into selected', () => {
       const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
 
       component.onRadioChange(given);
@@ -141,6 +141,52 @@ describe('MultiRadioSelectDialog', () => {
 
       expect(value).toEqual(new DialogCloseType('accept', [given]));
     });
+  });
+
+
+  describe('onReset', () => {
+    it('should clear tempSelected', () => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.onRadioChange(given);
+      component.onReset();
+
+      expect(component.tempSelected).toEqual([]);
+    });
+
+    it('should reset the checked value on the instance and viewInstance arrays to false', fakeAsync(() => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.ngOnInit();
+      flush();
+      component.onRadioChange(given);
+      component.onReset();
+
+      expect(component.typesController.viewInstance[given.uniqueIndex.index].checked).toEqual(false);
+    }));
+
+    it('should not remove the values in selected', fakeAsync(() => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.ngOnInit();
+      flush();
+      component.onRadioChange(given);
+      component.onReset();
+
+      expect(component.selected).toEqual([prevSelectedValue]);
+    }));
+
+    fit('should not remove the values in selected', fakeAsync(() => {
+      const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
+
+      component.ngOnInit();
+      flush();
+      component.onRadioChange(given);
+      component.onAccept();
+      component.onReset();
+
+      expect(component.selected).toEqual([prevSelectedValue, given]);
+    }));
   });
 });
 
