@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MultiRadioSelectControlInput, MultiRadioSelectDialogInput } from '../model/multi-radio-select.model';
 import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 import { MatDialog } from '@angular/material';
-import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
+import { DialogCloseType, MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
 
 @Component({
   selector: 'multi-radio-select-control',
@@ -14,9 +14,10 @@ export class MultiRadioSelectControl implements OnInit {
   @Input() multiRadioSelectControlInput: MultiRadioSelectControlInput;
   @Input() multiRadioSelectDialogInput: MultiRadioSelectDialogInput;
   @Input() dataSource: MultiSelectDataSource<any>;
-  @Input() previouslySelected: any[];
 
   @Output() selectionResult: EventEmitter<string[]> = new EventEmitter<string[]>();
+
+  private previouslySelected: any[] = [];
 
   constructor(private dialog: MatDialog) {
   }
@@ -45,6 +46,12 @@ export class MultiRadioSelectControl implements OnInit {
         searchControlPlaceHolder: this.multiRadioSelectDialogInput.searchControlPlaceHolder,
         dataSource: this.dataSource,
         previouslySelected: this.previouslySelected
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((dialogCloseType: DialogCloseType) => {
+      if (dialogCloseType.type === 'accept') {
+        this.previouslySelected = dialogCloseType.result;
       }
     });
   }
