@@ -176,7 +176,7 @@ describe('MultiRadioSelectDialog', () => {
       expect(component.selected).toEqual([prevSelectedValue]);
     }));
 
-    fit('should not remove the values in selected', fakeAsync(() => {
+    it('should not remove the values in selected', fakeAsync(() => {
       const given = new MultiSelectType({value: 'The Flash', viewValue: 'Flash Gordan'}, new UniqueIndex(1, 0), true);
 
       component.ngOnInit();
