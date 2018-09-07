@@ -34,7 +34,9 @@
         <div *ngFor="let multi of typesController.viewInstance; trackBy: trackByFn">
           <div class="control">
             <mat-checkbox color="primary"
-                          [(ngModel)]="multi.checked">
+                          [(ngModel)]="multi.checked"
+                          (change)="onRadioChange(multi)"
+            >
               {{multi.selectType.viewValue}}
             </mat-checkbox>
           </div>
@@ -50,7 +52,7 @@
     <mat-dialog-actions>
       <div class="left-container">
         <button mat-raised-button color="accent" (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="accent" (click)="onCancel()">Reset</button>
+        <button mat-raised-button color="accent" (click)="onReset()">Reset</button>
       </div>
 
       <div class="right-container">

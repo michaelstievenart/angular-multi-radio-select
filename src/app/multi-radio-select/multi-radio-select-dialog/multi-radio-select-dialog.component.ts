@@ -13,7 +13,7 @@ import { MultiSelectType, SelectType } from '../model/multi-radio-select-types.m
 })
 export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
 
-  typesController: MultiSelectTypesController;
+  typesController: MultiSelectTypesController = new MultiSelectTypesController();
 
   filterCtrl = new FormControl();
   filteredData: Observable<any[]>;
@@ -23,22 +23,28 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   pageSize: number;
 
   isLoading = true;
+  useReset = false;
+
+  selected: MultiSelectType [];
 
   constructor(public dialogRef: MatDialogRef<MultiRadioSelectDialog>,
               @Inject(MAT_DIALOG_DATA) public dialogData: MultiRadioSelectDialogData) {
   }
 
   ngOnInit() {
-    this.typesController = new MultiSelectTypesController();
     this.setupFilterCtrl();
-
+    this.selected = this.dialogData.previouslySelected;
     this.dialogData.dataSource.get(0, 500, 'asc');
+
     this.dialogData.dataSource.paginationInfo$.subscribe((count) => {
       this.dataCount = count;
-      this.pageSize = (count < 500 ? 100 : 500);
+      this.pageSize = 500;
     });
+
     this.dialogData.dataSource.data().subscribe((values) => {
-      this.typesController.init(values, this.dialogData.previouslySelected);
+      if (values && values.length > 0) {
+        this.typesController.init(values, this.selected);
+      }
     });
 
     this.dialogData.dataSource.loading$.subscribe((isLoading) => {
@@ -56,13 +62,18 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
     );
   }
 
+  filter(input: string): MultiSelectType [] {
+    this.typesController.viewInstance = this.typesController.instance.filter((value: MultiSelectType) => {
+      const viewValue = value.selectType.viewValue.toLowerCase();
+      return viewValue.indexOf(input.toLowerCase()) > -1 || viewValue.includes(input) || viewValue.match(input);
+    });
 
-  filter(value: any): any {
-    return;
+    return this.typesController.viewInstance;
   }
 
   resetFilter(): any {
-    return;
+    this.typesController.copyInstance();
+    return this.typesController.instance.slice();
   }
 
   ngAfterViewInit() {
@@ -80,17 +91,32 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
       'asc'
     );
   }
-  
+
+  onReset() {
+    this.useReset = true;
+    this.typesController.cacheForReset();
+    this.typesController.reset();
+  }
+
   onCancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(new DialogCloseType('cancel'));
   }
 
   onAccept() {
-    this.dialogRef.close();
+    this.dialogRef.close(new DialogCloseType('accept', this.selected));
   }
 
   trackByFn(index: number, multi: MultiSelectType) {
     return multi.index;
+  }
+
+  onRadioChange(multi: MultiSelectType) {
+    if (multi.checked) {
+      this.selected.push(multi);
+    } else {
+      const index = this.selected.indexOf(multi);
+      this.selected.splice(index, 1);
+    }
   }
 }
 export class MultiSelectTypesController {
@@ -135,7 +161,6 @@ export class MultiSelectTypesController {
 
   copyInstance() {
     this._viewInstance = this._instance;
-    console.log(this._viewInstance);
   }
 
   reset() {
@@ -153,4 +178,14 @@ export class MultiSelectTypesController {
       ));
     }
   }
+}
+export class DialogCloseType {
+  constructor(public type: string, public result?: any) {}
+}
+
+export class UniqueIndex {
+    constructor(public pageNumber: number,
+                public pageSize: number,
+                public index) {
+    }
 }

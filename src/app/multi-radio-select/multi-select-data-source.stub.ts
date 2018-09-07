@@ -20,7 +20,6 @@ class MultiSelectDataSourceStub extends MultiSelectDataSource<SelectType> {
         catchError(() => of([])),
         finalize(() => this.isLoadingComplete())
       ).subscribe((resultSet: any) => {
-        console.log(resultSet);
         this.next(resultSet.result);
         this.dataCount(resultSet.count);
       });
@@ -38,7 +37,7 @@ class Pager {
   }
 }
 
-class Data {
+export class Data {
   static get() {
     const data = [];
     for (let i = 0; i < 10000; i++) {
