@@ -23,7 +23,7 @@ class MultiSelectDataSourceStub extends MultiSelectDataSource<SelectType> {
         this.next(resultSet.result);
         this.dataCount(resultSet.count);
       });
-    }, 1500);
+    }, 250);
   }
 }
 
