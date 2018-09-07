@@ -32,13 +32,13 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.pageSize = this.dialogData.pageSizeOption;
     this.setupFilterCtrl();
     this.selected = this.dialogData.previouslySelected;
-    this.dialogData.dataSource.get(0, 500, 'asc');
+    this.dialogData.dataSource.get(0, this.pageSize, 'asc');
 
     this.dialogData.dataSource.paginationInfo$.subscribe((count) => {
       this.dataCount = count;
-      this.pageSize = 500;
     });
 
     this.dialogData.dataSource.data().subscribe((values) => {

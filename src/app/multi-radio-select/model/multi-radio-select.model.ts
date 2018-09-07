@@ -20,6 +20,7 @@ interface MultiRadioSelectDialogData {
   searchControlPlaceHolder: string;
   dataSource: MultiSelectDataSource<any>;
   previouslySelected: any;
+  pageSizeOption: number;
 }
 
 export { MultiRadioSelectDialogInput, MultiRadioSelectControlInput, MultiRadioSelectDialogData };

@@ -18,6 +18,7 @@ export class MultiRadioSelectControl implements OnInit {
   @Output() selectionResult: EventEmitter<string[]> = new EventEmitter<string[]>();
 
   private previouslySelected: any[] = [];
+  private pageSizeOption = 500;
 
   constructor(private dialog: MatDialog) {
   }
@@ -45,7 +46,8 @@ export class MultiRadioSelectControl implements OnInit {
         dialogTitle: this.multiRadioSelectDialogInput.dialogTitle,
         searchControlPlaceHolder: this.multiRadioSelectDialogInput.searchControlPlaceHolder,
         dataSource: this.dataSource,
-        previouslySelected: this.previouslySelected
+        previouslySelected: this.previouslySelected,
+        pageSizeOption: this.pageSizeOption
       }
     });
 
