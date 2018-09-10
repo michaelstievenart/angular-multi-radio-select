@@ -45,7 +45,7 @@ export class MultiRadioSelectDialog implements OnInit, AfterViewInit {
 
     this.dialogData.dataSource.data().subscribe((values) => {
       if (values && values.length > 0) {
-        this.typesController.init(values, this.selected, this.currentPageIndex, this.pageSize);
+        this.typesController.init(values, [...this.selected, ...this.tempSelected], this.currentPageIndex, this.pageSize);
       }
     });
 
@@ -164,7 +164,9 @@ export class MultiSelectTypesController {
     return this._instance;
   }
 
-  updateUsingPreviouslySelected(previouslySelected: MultiSelectType[], currentPageIndex: number, pageSizeOption: number) {
+  updateUsingPreviouslySelected(previouslySelected: MultiSelectType[],
+                                currentPageIndex: number,
+                                pageSizeOption: number) {
     if (previouslySelected) {
       for (const prev of previouslySelected) {
         if (prev.uniqueIndex.pageIndex === currentPageIndex) {
