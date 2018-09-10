@@ -19,7 +19,6 @@ export class AppComponent implements OnInit {
   }
 
   output($value) {
-    console.log($value);
     this.value = $value;
   }
 }
