@@ -3,6 +3,7 @@ import { DialogCloseType, MultiRadioSelectControlInput, MultiRadioSelectDialogIn
 import { MultiSelectDataSource } from '../data-source/multi-select-data-source';
 import { MatDialog } from '@angular/material';
 import { MultiRadioSelectDialog } from '../multi-radio-select-dialog/multi-radio-select-dialog.component';
+import { MultiSelectType } from '../model/multi-radio-select-types.model';
 
 @Component({
   selector: 'multi-radio-select-control',
@@ -54,6 +55,11 @@ export class MultiRadioSelectControl implements OnInit {
     dialogRef.afterClosed().subscribe((dialogCloseType: DialogCloseType) => {
       if (dialogCloseType.type === 'accept') {
         this.previouslySelected = dialogCloseType.result;
+        const output = [];
+        this.previouslySelected.forEach((value: MultiSelectType) => {
+          output.push(value.selectType.value);
+        });
+        this.selectionResult.emit(output);
       }
     });
   }

@@ -17,10 +17,11 @@
           maxHeight: 800
           }"
           [dataSource]="dataSource"
+          (selectionResult)="output($event)"
         >
         </multi-radio-select-control>
       </div>
     </div>
-    <pre></pre>
+    <pre>{{value | json}}</pre>
   </div>
 </div>

@@ -9,11 +9,17 @@ import { MultiSelectDataSourceStub } from './multi-radio-select/multi-select-dat
 export class AppComponent implements OnInit {
 
   dataSource: MultiSelectDataSourceStub;
+  value: any;
 
   constructor() {
   }
 
   ngOnInit(): void {
     this.dataSource =  new MultiSelectDataSourceStub();
+  }
+
+  output($value) {
+    console.log($value);
+    this.value = $value;
   }
 }
